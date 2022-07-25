@@ -1,0 +1,48 @@
+{% extends 'head.html' %}
+{% block content %}
+
+    {% if user.is_authenticated %}
+    {% if testResults %}
+    <div id="login">
+        <input type="button" id="download-button" value="Download as CSV">
+        <script>document.getElementById("download-button").addEventListener("click", function () {
+            var html = document.querySelector("table").outerHTML;
+            htmlToCSV(html, "test_results.csv");
+        });</script>
+    </div>
+    <table id="login">
+        {% for key, value in testResults.items %} 
+        <tr><td>{{key}}</td><td>{{value}}</td></tr>
+        {% endfor %}
+    </table>
+
+   {% else %}
+  
+   
+    <div id="login">
+        <h2>AccountGG - Credential Tester</h2>
+        <h3>Upload CSV file</h3>
+        <p>Edit csv file before uploading. Format is <code>username,password</code></p>
+        {% if msg %}
+        <p class="error">Only CSV files are allowed</p>
+        {% endif %}
+        <div class="form">
+    <form method="POST" class="post-form" enctype="multipart/form-data">  
+        {% csrf_token %}  
+        {{ form.as_p }}  
+        <input type="submit" value="Submit" onclick="this.form.submit(); this.disabled=true; this.value='Testing...';"> 
+        
+        </form> 
+       
+        {% endif %}
+        {% else %}
+
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'loginView' %}">Login</a>
+        </li>
+
+        {% endif %}
+    
+        </div>
+        </div>
+ {% endblock %}
